@@ -1,52 +1,59 @@
-<!-- This is a static file -->
-<!-- served from your routes in server.js -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A cool thing made with Glitch">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="App to try out REST APIs" />
+    <title>Country REST</title>
 
-    <title>Welcome to Glitch!</title>
+    <link rel="stylesheet" href="/style.css" />
 
-    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
-    <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/style.css">
-
-    <!-- import the webpage's client-side javascript file -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
     <script src="/script.js" defer></script>
   </head>
   <body>
-    <header>
-      <h1>A Dream of the Future</h1>
-    </header>
+    <div>
+      <h1>Country Search</h1>
+    </div>
 
     <main>
-      <h2>Oh hi,</h2>
-
-      <p>Tell me your hopes and dreams:</p>
-
-      <form>
+      <form id="country-form">
         <label>
-          New Dream
-          <input name="dream" type="text" maxlength="100" required placeholder="Dreams!">
+          <input
+            name="country"
+            type="search"
+            maxlength="100"
+            required
+            placeholder="Country name (can be partial) or country code"
+          />
         </label>
-        <button type="submit" id="submit-dream">Add Dream</button>
+        <button type="submit" id="submit-country">Search</button>
       </form>
 
-      <section class="dreams">
-        <ul id="dreams">
+      <section class="countries">
+        <ul id="countries">
           <em>loading dreams&hellip;</em>
         </ul>
       </section>
     </main>
 
-    <footer>Made with <a href="https://glitch.com">Glitch</a>!</footer>
-
-    <!-- include the Glitch button to show what the webpage is about and
-          to make it easier for folks to view source and remix -->
-    <div class="glitchButton" style="position:fixed;top:2em;right:20px;"></div>
-    <script src="https://button.glitch.me/button.js" defer></script>
+    <footer>Stats here</footer>
   </body>
+  <script>
+    $("#country-form").submit(e => {
+      e.preventDefault();
+
+      // Get input field values
+      let searchQuery = `search=${countrySearchForm.elements.country.value}`
+
+      $.get(
+        "https://special-colossal-muscari.glitch.me/searchcountries",
+        searchQuery,
+        function(data) {
+          console.log("data:", data);
+        }
+      )
+    })
+  </script>
 </html>
