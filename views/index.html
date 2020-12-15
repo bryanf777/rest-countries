@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="App to call REST APIs and get country information" />
+    <title>Country REST</title>
+    <link id="favicon" rel="icon" href="https://cdn.glitch.com/de1abf79-c4bf-49ac-82e1-2bf42c6d04fc%2Ffavicon.ico?v=1608003759104" type="image/x-icon">
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  </head>
+  <body>
+    <div>
+      <h1>Country Information Search</h1>
+    </div>
+
+    <main>
+      <div id="input-panel" class="panel">
+      <form id="country-form">
+        <input
+          name="country"
+          type="search"
+          maxlength="100"
+          required
+          placeholder="Country name (can be partial) or country code"
+        />
+        <button type="submit" id="submit-country">Search</button>
+      </form>
+      </div>
+      <div id="countries-panel" class="panel"></div>
+      <div id="stat-panel" class="panel"></div>
+      <div id="error-panel" class="panel"><p id="error-message">
+        </p></div>
+    </main>
+  </body>
+  <script type="text/x-handlebars-template" id="template-countries">
+    <div>
+    <table>
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Alpha Code 2</th>
+        <th>Alpha Code 3</th>
+        <th>Flag</th>
+        <th>Region</th>
+        <th>Subregion</th>
+        <th>Population</th>
+        <th>Languages</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each array}}
+        <tr>
+          <td>{{this.name}}</td>
+          <td>{{this.alpha2Code}}</td>
+          <td>{{this.alpha3Code}}</td>
+          <td><img class="flag" src="{{this.flag}}" alt="country flag"></img></td>
+          <td>{{this.region}}</td>
+          <td>{{this.subregion}}</td>
+          <td>{{this.population}}</td>
+          <td>{{#each this.languages}}{{this.name}}{{#unless @last}}, {{/unless}}{{/each}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+    </table>
+    </div>
+  </script>
+  <script type="text/x-handlebars-template" id="template-regions">
+  <div>
+  <div class="country-count">Country count: {{country_count}}</div>
+  <table class="region">
+  <thead>
+    <tr>
+      <th colspan="2">Region Counts</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each regions}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.value}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+  </table>
+  </div>
+  <div>
+  <table class="region">
+  <thead>
+    <tr>
+      <th colspan="2">Sub-Region Counts</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each subregions}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.value}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+  </table>
+  </div>
+  </script>
+  <script src="/script.js"></script>
+</html>
