@@ -1,37 +1,73 @@
 // client-side js, loaded by index.html
 
-// define variables that reference elements on our page
-const countryList = document.getElementById("countries");
-const countrySearchForm = document.querySelector("form");
+const urlSearchApi = "https://special-colossal-muscari.glitch.me/api/v1/countries/search"
 
-function appendNewDream(dream) {
-  // const newListItem = document.createElement("li");
-  // newListItem.innerText = dream;
-  // dreamsList.appendChild(newListItem);
-}
+$("#country-form").submit((e) => {
+  e.preventDefault()
 
-// fetch the initial list of dreams
-// fetch("/dreams")
-//   .then(response => response.json()) // parse the JSON from the server
-//   .then(dreams => {
-//     // remove the loading text
-//     dreamsList.firstElementChild.remove();
-  
-//     // iterate through every dream and add it to our page
-//     dreams.forEach(appendNewDream);
-  
-//     // listen for the form to be submitted and add a new dream when it is
-//     dreamsForm.addEventListener("submit", event => {
-//       // stop our form submission from refreshing the page
-//       event.preventDefault();
+  // Get value to search.
+  const queryText = $("form").find('input[name="country"]').val()
+  let searchQuery = `query=${queryText}`
 
-//       // get dream value and add it to the list
-//       let newDream = dreamsForm.elements.dream.value;
-//       dreams.push(newDream);
-//       appendNewDream(newDream);
+  // Call search API.
+  $.get(
+    urlSearchApi,
+    searchQuery,
+    function (result) {
 
-//       // reset form
-//       dreamsForm.reset();
-//       dreamsForm.elements.dream.focus();
-//     });
-//   });
+      // Check for errors.
+      if (result.status) {
+        // Call succeeded but did not return countries. Existence of status attribute indicates issue.
+        displayError(result.message ? result.message : JSON.stringify(result))
+        return
+      } else {
+        $("#error-panel").hide()
+      }
+      let countries = result
+      if (countries.length === 0) {
+        displayError("No countries returned")
+        return
+      }
+
+      // Populate and display template with country values.
+      let templateCountries = $("#template-countries").html()
+      let compiledTemplateCountries = Handlebars.compile(templateCountries)
+      $("#countries-panel").html(compiledTemplateCountries({ array: countries }))
+
+      // Calculate regional count information.
+      let regionMap = new Map()
+      let subregionMap = new Map()
+      countries.forEach(element => {
+        incrementMapCount(regionMap, element.region)
+        incrementMapCount(subregionMap, element.subregion)          
+      })
+
+      // Populate and display template with regional count information.
+      let templateRegions = $("#template-regions").html()
+      let compiledTemplateRegions = Handlebars.compile(templateRegions)
+      // Workaround: Handlebars has limitations with Map — convert to Array.
+      let regionArray = Array.from(regionMap, ([name, value]) => ({name, value}))
+      let subregionArray = Array.from(subregionMap, ([name, value]) => ({name, value}))
+      $("#stat-panel").html(compiledTemplateRegions({ country_count: countries.length , regions: regionArray, subregions: subregionArray }))
+
+      $("#countries-panel").show()
+      $("#stat-panel").show()
+
+      // Increment value of given Map key by one.
+      function incrementMapCount(map, key) {
+        if (map.has(key)) {
+          map.set(key, map.get(key) + 1)
+        } else {
+          map.set(key, 1)
+        }
+      }
+      
+      function displayError(message) {
+        $("#error-message").text(`Error: ${message}`)
+        $("#countries-panel").hide()
+        $("#stat-panel").hide()
+        $("#error-panel").show()       
+      }
+    }
+  )
+})

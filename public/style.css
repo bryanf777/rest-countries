@@ -47,8 +47,41 @@ form button:hover {
   background-color: lavender;
 }
 
-footer {
-  margin-top: 3em;
-  padding-top: 1.5em;
-  border-top: 1px solid lightgrey;
+table {
+  width: 100%;
+}
+
+table.region {
+  table-layout: fixed;
+}
+
+table, th, td {
+  border: 1px solid lightgrey;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 2px 8px;
+}
+
+.panel {
+  background-color: #eee;
+  padding: 1em;
+  border-radius: .25em;
+  margin: 1em;
+}
+
+/* Hide these initially */
+#countries-panel, #stat-panel, #error-panel {
+  display: none;
+}
+
+img {
+  height:75px;
+  width:auto;
+}
+
+.country-count {
+  margin: 2em 0em 2em;
+  font-weight: bold;
 }

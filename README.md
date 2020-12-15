@@ -1,22 +1,26 @@
-# hello-express
+# rest-countries
 
-A server that serves a webpage, its resources, and some data
+A web app that serves a webpage, that searches for country information.
+
+Also has API for country information searches:
+
+`/api/v1/countries/search?query=<country name (can be partial) | 2 or 3 character country code>`
 
 
-## Your Project
+## Details
 
 On the front-end,
 
 - Edit `views/index.html` to change the content of the webpage
-- `public/client.js` is the javacript that runs when you load the webpage
+- `public/script.js` is the javacript that runs when page loaded
 - `public/style.css` is the styles for `views/index.html`
 - Drag in `assets`, like images or music, to add them to your project
 
 On the back-end,
 
-- your app starts at `server.js`
-- add frameworks and packages in `package.json`
-- safely store app secrets in `.env` (nobody can see this but you and people you invite)
+- App starts at `server.js`
+- Add frameworks and packages in `package.json`
+- Store app secrets in `.env` (nobody can see this but you and people you invite)
 
 Click `Show` in the header to see your app live. Updates to your code will instantly deploy.
 
