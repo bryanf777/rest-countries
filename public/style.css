@@ -17,19 +17,25 @@ h1 {
 
 form {
   background-color: #eee;
-  display: grid;
-  grid-gap: 1em;
   padding: 1em;
-  max-width: 60ch;
 }
 
-input {
+form input[type="search"] {
   border: 1px solid silver;
-  display: block;
   font-size: 16px;
   margin-bottom: 10px;
   padding: 5px;
-  width: 100%;
+  width: 600px;
+}
+
+form input[type="checkbox"] {
+  height: 25px;
+  width: 25px;
+}
+
+form label {
+  color: #373fff;
+  font-size: 130%;
 }
 
 form button {
@@ -41,6 +47,7 @@ form button {
   line-height: 1.4em;
   padding: 0.25em 1em;
   max-width: 20ch;
+  width: 600px;
 }
 
 form button:hover {
