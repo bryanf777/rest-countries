@@ -4,7 +4,7 @@ A web app that serves a webpage, that searches for country information.
 
 Also has API for country information searches:
 
-`/api/v1/countries/search?query=<country name (can be partial) | 2 or 3 character country code>`
+`/api/v1/countries/search?query=<country name (can be partial) | 2 or 3 character country code>[&exactmatch]`
 
 
 ## Details
