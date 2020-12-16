@@ -16,8 +16,8 @@
     "node": "12.x"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/bryanf777/rest-countries"
+    "type": "git",
+    "url": "https://github.com/bryanf777/rest-countries"
   },
   "license": "MIT",
   "keywords": [

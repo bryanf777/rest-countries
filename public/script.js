@@ -8,6 +8,11 @@ $("#country-form").submit((e) => {
   // Get value to search.
   const queryText = $("form").find('input[name="country"]').val()
   let searchQuery = `query=${queryText}`
+  
+  const exactMatchSelected = $('#exact-match').prop('checked')
+  if (exactMatchSelected) {
+    searchQuery = `${searchQuery}&exactmatch`
+  }
 
   // Call search API.
   $.get(

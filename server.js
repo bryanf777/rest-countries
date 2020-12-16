@@ -23,19 +23,11 @@ app.get("/api/v1/countries/search", (request, response) => {
     response.set('Content-Type', 'application/json')
     return response.status(422).send({"status":422, "errorCode":101, "message":"Empty query string given."})
   }
-  
-  let queryValue = queryString.query
-  
-  // Regular expression for two and three character country codes.
-  let iso3166CodeRegularExpression = /^[A-Za-z]{2,3}$/
 
-  // If query string is two or three alpha characters, do country code lookup.
-  let isCountryCodeCall = iso3166CodeRegularExpression.exec(queryValue)
+  let queryValue = encodeURIComponent(queryString.query)
+  let exactMatch = queryString.hasOwnProperty("exactmatch")
   
-  // Do search.
-  const searchByCodeEndpoint = "/rest/v2/alpha/"
-  const searchByNameEndpoint = "/rest/v2/name/"
-  makeCountryApiCall(isCountryCodeCall ? searchByCodeEndpoint : searchByNameEndpoint, encodeURIComponent(queryValue))
+  makeCountryApiCall(queryValue, exactMatch)
     .then((result) => {
       return response.json(result)
     })
@@ -46,20 +38,29 @@ app.get("/api/v1/countries/search", (request, response) => {
 })
 
 
-function makeCountryApiCall(apiCall, queryString) {
+function makeCountryApiCall(queryValue, exactMatch) {
+
+  // If query string is two or three alpha characters and exact match not request, do country code lookup.
+  let iso3166CodeRegularExpression = /^[A-Za-z]{2,3}$/
+  let isCountryCodeCall = iso3166CodeRegularExpression.exec(queryValue)
+  
+  let searchEndpoint
+  const fieldNamesToGet = "fields=name;alpha2Code;alpha3Code;flag;region;subregion;population;languages"
+  if (isCountryCodeCall) {
+    searchEndpoint = `/rest/v2/alpha/${queryValue}?${fieldNamesToGet}`
+  } else {
+    searchEndpoint = `/rest/v2/name/${queryValue}?${fieldNamesToGet}&${exactMatch ? "fullText=true" : "fullText=false"}`
+  }
 
   return new Promise((resolve, reject) => {
 
     const http = require("https")
-  
-    // See https://restcountries.eu/#filter-response for details.
-    let fieldNamesToGet = "fields=name;alpha2Code;alpha3Code;flag;region;subregion;population;languages"
 
     let options = {
       host: "restcountries.eu",
-      path: `${apiCall}${queryString}?${fieldNamesToGet}`
+      path: searchEndpoint
     }
-  
+    
     let req = http.get(options, function(res) {
       
       // Buffer the body entirely for processing as a whole.
