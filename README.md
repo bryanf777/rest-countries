@@ -24,6 +24,10 @@ On the back-end,
 
 Click `Show` in the header to see your app live. Updates to your code will instantly deploy.
 
+# Try it out!
+
+https://special-colossal-muscari.glitch.me/
+
 
 ## Made by [Glitch](https://glitch.com/)
 
